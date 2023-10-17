@@ -65,11 +65,65 @@ def send_position(data):
             print("Connection attempt Failed")
             time.sleep(0.5)
 
+
+def pass_baton(ip):
+    """This function will send a signal to the other robot that it's their turn to move"""
+    sent = False
+    while not sent:
+        try:
+            # create a socket connection
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            # connect to the server on port 54321
+            port = 54321
+
+            s.connect((connect_ip, port))
+            break
+        except ConnectionRefusedError:
+            print("Connection Failed, Retrying..")
+            time.sleep(0.5)
+            continue
+    print("Connection Established. Sending Baton.")
+    baton = 1  # this is the signal to the other robot that it's their turn to move
+    s.sendall(baton.to_bytes(1, "big"))
+
+    # close the socket connection
+    s.close()
+
+
+def wait_for_baton():
+    """This function will wait for the other robot to signal that it's my turn to move"""
+    # create a socket object
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    # bind the socket to a public host and port
+    s.bind((bind_ip, 54321))
+    s.listen(1)
+    sent = False
+    while not sent:
+        try:
+            # accept connections from outside
+            (clientsocket, address) = s.accept()
+            print("Connection from", address)
+            # receive the data from the client
+            data = clientsocket.recv(1024)
+            # print the data received from the client
+            print("With data: ", data)
+            if data == 1:
+                sent = True
+                print("Baton Received. Moving...")
+                # close the client socket
+                clientsocket.close()
+
+        except socket.error:
+            print("Connection attempt Failed")
+            time.sleep(0.5)
+
+
 def main():
-    robert = "172.29.208.119"
-    print()
-    position = get_remote_position(robert)
-    print(position)
+    raise NotImplementedError(
+        "This file is not meant to be run as a standalone script."
+    )
+
 
 if __name__ == "__main__":
     main()
