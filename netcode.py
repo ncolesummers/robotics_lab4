@@ -2,6 +2,8 @@ import socket
 import pickle
 import time
 
+bind_ip = "0.0.0.0"
+
 
 def get_remote_position(ip):
     """This function will connect to the other robot's controller and get the current position of the robot.
@@ -18,8 +20,8 @@ def get_remote_position(ip):
             break
         except ConnectionRefusedError:
             print("Connection Failed, Retrying..")
+            time.sleep(1)
             continue
-        sent = True
     # print the data received from the server
     data = s.recv(1024)
     # load the data into a list
@@ -40,7 +42,7 @@ def send_position(data):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     # bind the socket to a public host and port
-    s.bind(("172.29.208.47", 12345))
+    s.bind((bind_ip, 12345))
 
     # become a server socket
     s.listen(1)
