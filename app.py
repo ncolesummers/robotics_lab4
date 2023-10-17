@@ -70,13 +70,13 @@ def part2(robot, ip):
     """Part 2 of the lab"""
 
     # pick up the die
-    robot.write_cartesian_position(block_home)
+    robot.write_cartesian_position(*block_home)
     robot.start_robot()
     robot.shunk_gripper("close")
 
     # move the die to a random position and then talk to the other robot's controller
     random_position = create_random_position()
-    robot.write_cartesian_position(random_position)
+    robot.write_cartesian_position(*random_position)
     robot.start_robot()
     robot.write_robot_connection_bit(0)
     send_position(random_position)
