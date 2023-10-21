@@ -13,7 +13,7 @@ def create_random_position():
     coords[0] = random.randint(coords[0] - 50, coords[0] + 50)
     coords[1] = random.randint(coords[1] - 50, coords[1] + 50)
     coords[2] = random.randint(coords[2] - 100, coords[2] + 100)
-    print("#debug random position", coords)
+    print(f"random position created: {coords}")
     return coords
 
 
