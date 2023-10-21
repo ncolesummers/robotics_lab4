@@ -3,7 +3,7 @@ import random
 import unittest
 
 # constants
-offset = [-33, 1431, 0, 186, -121, 0]
+offset = [4, -1444, 0, -186, 121, 0]
 
 
 def create_random_position():
@@ -15,6 +15,20 @@ def create_random_position():
     coords[2] = random.randint(coords[2] - 100, coords[2] + 100)
     print("#debug random position", coords)
     return coords
+
+
+def move_back(robot):
+    """This function will move back along the y axis to a safer position"""
+    safe_position = [542.206, -400, 290, -93, 62, 177]
+    robot.write_cartesian_position(*safe_position)
+
+
+def move_away_from_partner(robot, position):
+    """We are moving in the positive y direction to get away from the other robot"""
+    deep_copy = position.copy()
+    deep_copy[1] += 100
+    print("backing up...")
+    robot.write_cartesian_position(*deep_copy)
 
 
 def translate(position):
@@ -29,15 +43,15 @@ def translate(position):
 def ease_in(robot, position):
     """This function will reduce the speed of the robot as it approaches the final position.
     create a new position with y and z increased by 20
-    this will keep the higher up and further from its partner
+    this will keep the die higher up and further from its partner
     as it moves to the final position"""
     print("Easing in")
     print("#debug position", position)
     deceleration_point = position.copy()
     # increase y by 20, meaning it will be further from the other robot
-    deceleration_point[1] += 20
+    deceleration_point[1] += 40
     # increase z by 20, meaning it will be higher up
-    deceleration_point[2] += 20
+    deceleration_point[2] += 40
     print("#debug deceleration point", deceleration_point)
     robot.write_cartesian_position(*deceleration_point)
     robot.start_robot()
@@ -47,7 +61,7 @@ def ease_in(robot, position):
 
 
 def reset_speed(robot, speed):
-    """This function will reset the speed of the robot to 100"""
+    """This function will reset the speed of the robot to the top speed"""
     robot.set_speed(speed)
 
 
